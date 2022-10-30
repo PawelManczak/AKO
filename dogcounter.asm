@@ -16,7 +16,7 @@
 	nowa_linia db 10
 	liczba_znakow dd ?
 	pies db "pies"
-	zmienna db ?
+	zmienna dd "asd"
 
 .code 
 
@@ -77,18 +77,56 @@ _main PROC
 	 call __write ; wyúwietlenie przekszta≥conego
 	 add esp, 12 ; usuniecie parametrůw ze stosu
 
-	 mov liczba_znakow, 1
-	 mov dword ptr zmienna, esi
-
-	 ;mov bl, zmienna
+	 mov liczba_znakow, 2
 	 
-	 push liczba_znakow
+	 cmp esi, 1
+	 jne dwa
+	 mov esi, "1"
+	 dwa:
+	 cmp esi, 2
+	 jne trzy
+	 mov esi, "2"
+	 trzy:
+	 cmp esi, 3
+	 jne cztery
+	 mov esi, "3"
+	 cztery:
+	 cmp esi, 4
+	 jne piec
+	 mov esi, "4"
+	 piec:
+	 cmp esi, 5
+	 jne szesc
+	 mov esi, "5"
+	 szesc:
+	 cmp esi, 6
+	 jne siedem
+	 mov esi, "6"
+	 siedem:
+	 cmp esi, 7
+	 jne osiem
+	 mov esi, "7"
+	 osiem:
+	 cmp esi, 8
+	 jne dziewiec
+	 mov esi, "8"
+	 dziewiec:
+	 cmp esi, 9
+	 jne zero
+	 mov esi, "9"
+	 zero:
+	 cmp esi, 0
+	 jne zliczanie
+	 mov esi, "0"
+	 
+	 
+	 ;mov bl, zmienna
+	 zliczanie:
+	 mov zmienna, esi
+	 push 1
 	 push offset zmienna
 	 push 1
-	 call __write ; wyúwietlenie przekszta≥conego
-	 add esp, 12 ; usuniecie parametrůw ze stosu
-
-
+	 call __write 
 	 push 0
 	 call _ExitProcess@4 ; zakoŮczenie programu
 _main ENDP
