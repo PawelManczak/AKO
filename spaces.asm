@@ -61,14 +61,60 @@ ptl:
 
 	a:
 	cmp dl, "a"
-	jne b
+	jne cflag
 	mov nowy[ebx-1], "ą"
 	dec ebx
 	jmp dalej
 	
-	b:
+	cflag:
 
+	cmp dl, "c"
+	jne e
+	mov nowy[ebx-1], "ć"
+	dec ebx
+	jmp dalej
 
+	e:
+	cmp dl, "e"
+	jne l
+	mov nowy[ebx-1], "ę"
+	dec ebx
+	jmp dalej
+
+	l:
+	cmp dl, "l"
+	jne n
+	mov nowy[ebx-1], "ł"
+	dec ebx
+	jmp dalej
+
+	n:
+	cmp dl, "n"
+	jne o
+	mov nowy[ebx-1], "ń"
+	dec ebx
+	jmp dalej
+
+	o:
+	cmp dl, "o"
+	jne s
+	mov nowy[ebx-1], "ó"
+	dec ebx
+	jmp dalej
+
+	s:
+	cmp dl, "s"
+	jne z
+	mov nowy[ebx-1], "ś"
+	dec ebx
+	jmp dalej
+
+	z:
+	cmp dl, "z"
+	jne p_dalej
+	mov nowy[ebx-1], "ż"
+	dec ebx
+	jmp dalej
 
 
 
