@@ -1,0 +1,93 @@
+.686
+.model flat
+extern __write : PROC
+extern __read : PROC
+extern _ExitProcess@4 : PROC
+public _main
+.data
+znaki db 12 dup (?)
+obszar db 12 dup (?)
+dziesiec dd 10 ; mno¿nik
+.code
+wyswietl_EAX PROC
+
+mov ebx, 10; dzielnik
+mov edi, 10
+
+ptl:
+mov edx, 0
+DIV ebx
+add dl, 30h
+
+mov znaki[edi], dl
+dec edi
+cmp eax, 0
+
+
+jne ptl
+
+
+; wyœwietlenie cyfr na ekranie
+push dword PTR 12 ; liczba wyœwietlanych znaków
+push dword PTR OFFSET znaki ; adres wyœw. obszaru
+push dword PTR 1; numer urz¹dzenia (ekran ma numer 1)
+call __write ; wyœwietlenie liczby na ekranie
+add esp, 12 ; usuniêcie parametrów ze stosu
+
+
+
+
+
+
+ret
+wyswietl_EAX ENDP
+wczytaj_EAX PROC
+
+push ebx
+push ecx
+
+
+push dword PTR 12
+push dword PTR OFFSET obszar ; adres obszaru pamiêci
+push dword PTR 0; numer urz¹dzenia (0 dla klawiatury)
+call __read ; odczytywanie znaków z klawiatury
+; (dwa znaki podkreœlenia przed read)
+add esp, 12 ; usuniêcie parametrów ze stosu
+; bie¿¹ca wartoœæ przekszta³canej liczby przechowywana jest
+; w rejestrze EAX; przyjmujemy 0 jako wartoœæ pocz¹tkow¹
+mov eax, 0
+mov ebx, OFFSET obszar ; adres obszaru ze znakami
+pobieraj_znaki:
+mov cl, [ebx] ; pobranie kolejnej cyfry w kodzie
+; ASCII
+inc ebx ; zwiêkszenie indeksu
+cmp cl,10 ; sprawdzenie czy naciœniêto Enter
+je byl_enter ; skok, gdy naciœniêto Enter
+sub cl, 30H ; zamiana kodu ASCII na wartoœæ cyfry
+movzx ecx, cl ; przechowanie wartoœci cyfry w
+; rejestrze ECX
+; mno¿enie wczeœniej obliczonej wartoœci razy 10
+mul dword PTR dziesiec 
+add eax, ecx ; dodanie ostatnio odczytanej cyfry
+jmp pobieraj_znaki ; skok na pocz¹tek pêtli
+byl_enter:
+
+pop ecx
+pop ebx
+
+ret
+wczytaj_EAX ENDP
+
+
+_main PROC
+
+; max iloœæ znaków wczytywanej liczby
+
+; wartoœæ binarna wprowadzonej liczby znajduje siê teraz w EAX
+call wczytaj_EAX	
+MUL EAX
+call wyswietl_EAX	
+push 0
+call _ExitProcess@4
+_main ENDP
+END
