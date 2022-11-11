@@ -7,11 +7,10 @@ public _main
 .data
 znaki db 12 dup (?)
 obszar db 12 dup (?)
-dziesiec db 10 ; mnoınik
+dziesiec db 10 ; mno¿nik
 dekoder db '0123456789ABCDEF'
 spacja db ' '
 minus db '-'
-zero db '0'
 
 .code
 
@@ -30,61 +29,41 @@ ret
 zeruj_znaki ENDP
 wyswietl_u2 PROC
 pusha
-cmp ax, 0
-jne niezero
-
-
-push dword PTR 1 ; liczba wyæwietlanych znak—w
-push dword PTR OFFSET zero ; adres wyæw. obszaru
-push dword PTR 1; numer urzˆdzenia (ekran ma numer 1)
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
-
-push dword PTR 1 ; liczba wyæwietlanych znak—w
-push dword PTR OFFSET spacja ; adres wyæw. obszaru
-push dword PTR 1; numer urzˆdzenia (ekran ma numer 1)
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
-
-popa
-ret
-niezero:
-
 
 not ax
 inc ax
 
-mov esi, 10
+mov edi, 10
 
 ptl:
 	mov ah, 0 ;zerowanie reszty
 	;mozliwe, ze nie bedzie zerowac?
 	div dziesiec
 	add ah, 30h
-	mov znaki[esi], ah
+	mov znaki[edi], ah
 	
-	dec esi
+	dec edi
 	cmp al, 0
 	jne ptl
 
-push dword PTR 1 ; liczba wyæwietlanych znak—w
-push dword PTR OFFSET minus ; adres wyæw. obszaru
-push dword PTR 1; numer urzˆdzenia (ekran ma numer 1)
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
+push dword PTR 1 ; liczba wyœwietlanych znaków
+push dword PTR OFFSET minus ; adres wyœw. obszaru
+push dword PTR 1; numer urz¹dzenia (ekran ma numer 1)
+call __write ; wyœwietlenie liczby na ekranie
+add esp, 12 ; usuniêcie parametrów ze stosu
 
 
-push dword PTR 12 ; liczba wyæwietlanych znak—w
-push dword PTR OFFSET znaki ; adres wyæw. obszaru
-push dword PTR 1; numer urzˆdzenia (ekran ma numer 1)
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
+push dword PTR 12 ; liczba wyœwietlanych znaków
+push dword PTR OFFSET znaki ; adres wyœw. obszaru
+push dword PTR 1; numer urz¹dzenia (ekran ma numer 1)
+call __write ; wyœwietlenie liczby na ekranie
+add esp, 12 ; usuniêcie parametrów ze stosu
 
-push dword PTR 1 ; liczba wyæwietlanych znak—w
-push dword PTR OFFSET spacja ; adres wyæw. obszaru
-push dword PTR 1; numer urzˆdzenia (ekran ma numer 1)
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
+push dword PTR 1 ; liczba wyœwietlanych znaków
+push dword PTR OFFSET spacja ; adres wyœw. obszaru
+push dword PTR 1; numer urz¹dzenia (ekran ma numer 1)
+call __write ; wyœwietlenie liczby na ekranie
+add esp, 12 ; usuniêcie parametrów ze stosu
 
 popa
 ret
@@ -92,12 +71,8 @@ wyswietl_u2 ENDP
 
 wyswietl_nkb PROC
 pusha
-;dynamiczna zmienna 12 bitowa
-sub esp, 12
-mov edi, esp
 
-
-mov esi, 11
+mov edi, 10
 
 
 ptl2:
@@ -106,38 +81,25 @@ ptl2:
 	div dziesiec
 	
 	add ah, 30h
-	mov [edi][esi], ah
+	mov znaki[edi], ah
 
-	dec esi
+	dec edi
 	cmp al, 0
 	jne ptl2
 
-	inc esi
-	ptl3:
-	dec esi
-	mov ah, 0
-	mov [edi][esi], ah
-	
-	
-	cmp esi, 0
-	ja ptl3
+	push dword PTR 12 ; liczba wyœwietlanych znaków
+push dword PTR OFFSET znaki ; adres wyœw. obszaru
+push dword PTR 1; numer urz¹dzenia (ekran ma numer 1)
+call __write ; wyœwietlenie liczby na ekranie
+add esp, 12 ; usuniêcie parametrów ze stosu
 
-	
-;mov byte PTR [edi][11], 10
-push  12 ; liczba wyæwietlanych znak—w
-push   edi ; adres wyæw. obszaru
-push  1; numer urzˆdzenia (ekran ma numer 1)
+push dword PTR 1 ; liczba wyœwietlanych znaków
+push dword PTR OFFSET spacja ; adres wyœw. obszaru
+push dword PTR 1; numer urz¹dzenia (ekran ma numer 1)
+call __write ; wyœwietlenie liczby na ekranie
+add esp, 12 ; usuniêcie parametrów ze stosu
 
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
 
-push dword PTR 1 ; liczba wyæwietlanych znak—w
-push dword PTR OFFSET spacja ; adres wyæw. obszaru
-push dword PTR 1; numer urzˆdzenia (ekran ma numer 1)
-call __write ; wyæwietlenie liczby na ekranie
-add esp, 12 ; usuni«cie parametr—w ze stosu
-
-add esp, 12 ; usuni«cie parametr—w ze stosu
 popa
 ret
 
@@ -158,9 +120,9 @@ wyswietl_eax ENDP
 
 _main PROC
 
-; max iloæ znak—w wczytywanej liczby
+; max iloœæ znaków wczytywanej liczby
 
-; wartoæ binarna wprowadzonej liczby znajduje si« teraz w EAX
+; wartoœæ binarna wprowadzonej liczby znajduje siê teraz w EAX
 
 mov ecx, 30; licznik petli
 mov ebx, 0; nkb
@@ -186,12 +148,20 @@ ptl:
 		mov eax, edx
 		call wyswietl_eax
 
+
+	
 	koniec_petli:
+
+
 		call zeruj_znaki
 		
 
 loop ptl
 
+;mov eax, 13
+;all wyswietl_EAX
+;mov eax,12 
+;call wyswietl_EAX
 push 0
 call _ExitProcess@4
 _main ENDP
