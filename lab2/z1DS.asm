@@ -80,7 +80,7 @@ ptl2:
 
 	div dziesiec
 	
-	add ah, 30h
+	add ah, 30hdincm
 	mov znaki[edi], ah
 
 	dec edi
