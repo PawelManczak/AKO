@@ -35,7 +35,13 @@ pop eax
 
 ptl:
 	mov ebx, [edx + ecx - 4]
+	bt ebx, 0
+	jc zero
 	mov [eax + ecx - 4], ebx
+	jmp koniecptl
+	zero:
+	mov [eax + ecx - 4], dword ptr 0
+	koniecptl:
 sub ecx, 4
 cmp ecx, 0
 jge ptl
