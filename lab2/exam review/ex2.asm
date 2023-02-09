@@ -88,19 +88,7 @@ wczytaj_EAX ENDP
 
 _main PROC
 	call wczytaj_EAX	
-
-	mov ecx, 0 ; licznik
-	mov eax, 1 ; wart poczatkowa
-	mov ebx, 1; stara
-
-	ptl:
-		call wyswietl_EAX	
-		add eax, ecx
-
-	inc ecx
-	cmp ecx, 50
-	jb ptl
-
+	call wyswietl_EAX	
 	push 0
 	call _ExitProcess@4
 _main ENDP
